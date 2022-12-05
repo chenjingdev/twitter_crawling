@@ -1,5 +1,6 @@
 import chromedriver_autoinstaller
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 from private import *
@@ -44,8 +45,14 @@ search_field.send_keys(Keys.ARROW_DOWN)
 search_field.send_keys(Keys.RETURN)
 
 sleep(2)
-js = "var target = document.querySelector('[data-testid=cellInnerDiv]');target.parentNode.removeChild(target)"
-driver.execute_script(js)
+
+# 블럭클릭
+tweet_block = driver.find_element_by_css_selector("[data-testid=cellInnerDiv]")
+ActionChains(driver).key_down(Keys.CONTROL).click(tweet_block).key_up(Keys.CONTROL).perform()
+
+# 블럭삭제
+# js_removeBlock = "var target = document.querySelector('[data-testid=cellInnerDiv]');target.parentNode.removeChild(target)"
+# driver.execute_script(js_removeBlock)
 
 sleep(600)
 # 브라우저 탭 닫기
