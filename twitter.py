@@ -10,7 +10,7 @@ chromedriver_autoinstaller.install()
 
 options = webdriver.ChromeOptions() # Browser 세팅하기
 options.add_argument('lang=ko_KR') # 사용언어 한국어
-options.add_argument('disable-gpu') # 하드웨어 가속 안함
+# options.add_argument('disable-gpu') # 하드웨어 가속 안함
 options.add_argument('--start-maximized') # 하드웨어 가속 안함
 # options.add_argument('headless') # 창 숨기기
 
