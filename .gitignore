@@ -1,9 +1,6 @@
 /토큰.txt
 /private.py
 /node_modules
-/package-lock.json
-/package.json
 __pycache__/private.cpython-310.pyc
-/chromedriver
 /test1
 /test2
