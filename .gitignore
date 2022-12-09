@@ -3,5 +3,5 @@
 /private.js
 /node_modules
 __pycache__/private.cpython-310.pyc
-/test1
-/test2
+/error.log
+__pycache__/*.pyc
