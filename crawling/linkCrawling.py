@@ -15,6 +15,7 @@ from selenium.webdriver.common.keys import Keys
 from time import sleep
 from backend.userCrawling import *
 from customModule import *
+from selenium.webdriver.chrome.options import Options
 
 logging.basicConfig(filename='error.log', level=logging.ERROR)
 
@@ -23,18 +24,28 @@ startDate = ""
 endDate = ""
 tweetLinks = []
 
+options = Options()
+options.add_argument("user-data-dir=C:\\Users\\AtechM_03\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2")
+driver = webdriver.Chrome(executable_path=r'C:\path\to\chromedriver.exe', chrome_options=options)
+
 # chrome driver를 자동으로 설치함
 chromedriver_autoinstaller.install() 
 
 options = webdriver.ChromeOptions() # Browser 세팅하기
+options.add_argument("user-data-dir=/Users/chenjing/Library/Application Support/Google/Chrome/Default")
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
 options.add_argument('lang=ko_KR') # 사용언어 한국어
 options.add_argument('--start-maximized') # 창 최대화
-# options.add_argument('disable-gpu') # 하드웨어 가속 안함
+options.add_argument('disable-gpu') # 하드웨어 가속 안함
 # options.add_argument('headless') # 창 숨기기
 
+# chrome_options = Options()
+options.add_argument("--proxy-server=socks5://127.0.0.1:9150")
+
 # 브라우저 세팅
-driver = webdriver.Chrome(options=options)
+# driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(executable_path='C:/Users/user/Desktop/크롤링/crawler/crwaling code/chromedriver/chromedriver.exe', options=options)
+driver = webdriver.Chrome(executable_path="myPath", options=options)
 
 # 브라우저에 URL 호출하기
 driver.get(url='https://twitter.com/i/flow/login')
@@ -63,15 +74,16 @@ try:
 				txt = href.get_attribute("href")
 				x = re.search(f"{nickName}\/status\/[0-9]*", txt)
 				y = re.search("photo", txt)
+				z = re.search("media_tags", txt)
 
-				if x and not y:
+				if x and not y and not z:
 					tweetLinks.append(href.get_attribute("href"))
 					print(href.get_attribute("href"))
 
 		# 블럭삭제
 		js_removeBlock = "var target = document.querySelector('[data-testid=cellInnerDiv]');target.parentNode.removeChild(target)"
 		driver.execute_script(js_removeBlock)
-		sleep(0.5)
+		# sleep(0.5)
   
 except Exception:
 	logging.error(traceback.format_exc())
