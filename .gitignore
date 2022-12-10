@@ -1,7 +1,8 @@
-/토큰.txt
 /private.py
-/private.js
-/node_modules
-__pycache__/private.cpython-310.pyc
 /error.log
-__pycache__/*.pyc
+/config'
+/key.json
+__pycache__
+./backend/__pycache__
+./crawling/__pycache__
+/link_files

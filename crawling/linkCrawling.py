@@ -3,16 +3,40 @@ import re
 import logging
 import traceback
 import json
+import pandas as pd
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from time import sleep
-from private import *
+from backend.userCrawling import *
+from customModule import *
+
+jsonData = [
+  {
+		'name': 'test1',
+		'age': 23
+	},
+  {
+		'name': 'test3',
+		'age': 24
+	},
+  {
+		'name': 'test2',
+		'age': 26
+	},
+]
+df = pd.DataFrame(jsonData)
+CREATE_USER_TABLE(df)
+
+sys.exit()
 
 logging.basicConfig(filename='error.log', level=logging.ERROR)
+
 nickName = "mizuki_i_l"
 startDate = ""
 endDate = ""
@@ -24,8 +48,8 @@ chromedriver_autoinstaller.install()
 options = webdriver.ChromeOptions() # Browser 세팅하기
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
 options.add_argument('lang=ko_KR') # 사용언어 한국어
+options.add_argument('--start-maximized') # 창 최대화
 # options.add_argument('disable-gpu') # 하드웨어 가속 안함
-options.add_argument('--start-maximized') # 하드웨어 가속 안함
 # options.add_argument('headless') # 창 숨기기
 
 # 브라우저 세팅
@@ -34,45 +58,12 @@ driver = webdriver.Chrome(options=options)
 # 브라우저에 URL 호출하기
 driver.get(url='https://twitter.com/i/flow/login')
 
-# 이메일
-try:
-	element = WebDriverWait(driver, 10).until(
-		EC.presence_of_element_located((By.CSS_SELECTOR, "[name=text]"))
-	)
-	username_field = driver.find_element_by_name("text")
-	username_field.send_keys(email)
-	username_field.send_keys(Keys.RETURN)
-except:
-  print('이메일 입력 오류')
+# 트위터 로그인
+twitter_loggin(driver)
 
-# 아이디
-try:
-	element = WebDriverWait(driver, 10).until(
-		EC.presence_of_element_located((By.CSS_SELECTOR, "[name=text]"))
-	)
-	username_field2 = driver.find_element_by_name("text")
-	username_field2.send_keys(id)
-	username_field2.send_keys(Keys.RETURN)
-except:
-  print('아이디 입력 오류')
-
-
-# 비밀번호
-try:
-	element = WebDriverWait(driver, 10).until(
-		EC.presence_of_element_located((By.CSS_SELECTOR, "[name=password]"))
-	)
-	password_field = driver.find_element_by_name("password")
-	password_field.send_keys(password)
-	password_field.send_keys(Keys.RETURN)
-except:
-  print('비밀번호 입력 오류')
-  
 # url 변경
 try:
-	element = WebDriverWait(driver, 10).until(
-		EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid=cellInnerDiv]"))
-	)
+	el_located(driver, "[data-testid=cellInnerDiv]")
 	driver.get(url=f'https://twitter.com/{nickName}')
 except:
   print('url변경 오류')
@@ -82,9 +73,7 @@ except:
 # 첫번째 트윗 삭제
 try:
 	while True:
-		element = WebDriverWait(driver, 10).until(
-			EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid=cellInnerDiv] [data-testid=app-text-transition-container]"))
-		)
+		el_located(driver, "[data-testid=cellInnerDiv] [data-testid=app-text-transition-container]")
 
 		# 리플 있을경우 실행
 		if driver.find_element(By.CSS_SELECTOR, "[data-testid=cellInnerDiv] [data-testid=app-text-transition-container]").text:
@@ -113,16 +102,6 @@ with open(f"link_files/{nickName}_links.json", "w") as f:
    
 # print(tweetLinks)
 print('done!')
- 
- 
- 
- 
- 
-# 블럭클릭
-# tweet_block = driver.find_element_by_css_selector("[data-testid=cellInnerDiv]")
-# ActionChains(driver).key_down(Keys.CONTROL).click(tweet_block).key_up(Keys.CONTROL).perform()
-
-
 
 sleep(600)
 # 브라우저 탭 닫기
