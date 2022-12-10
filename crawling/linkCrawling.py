@@ -16,25 +16,6 @@ from time import sleep
 from backend.userCrawling import *
 from customModule import *
 
-jsonData = [
-  {
-		'name': 'test1',
-		'age': 23
-	},
-  {
-		'name': 'test3',
-		'age': 24
-	},
-  {
-		'name': 'test2',
-		'age': 26
-	},
-]
-df = pd.DataFrame(jsonData)
-CREATE_USER_TABLE(df)
-
-sys.exit()
-
 logging.basicConfig(filename='error.log', level=logging.ERROR)
 
 nickName = "mizuki_i_l"
