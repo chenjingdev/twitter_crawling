@@ -15,7 +15,6 @@ from selenium.webdriver.common.keys import Keys
 from time import sleep
 from backend.userCrawling import *
 from customModule import *
-from selenium.webdriver.chrome.options import Options
 
 logging.basicConfig(filename='error.log', level=logging.ERROR)
 
@@ -24,41 +23,42 @@ startDate = ""
 endDate = ""
 tweetLinks = []
 
-options = Options()
-options.add_argument("user-data-dir=C:\\Users\\AtechM_03\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2")
-driver = webdriver.Chrome(executable_path=r'C:\path\to\chromedriver.exe', chrome_options=options)
-
 # chrome driver를 자동으로 설치함
 chromedriver_autoinstaller.install() 
 
 options = webdriver.ChromeOptions() # Browser 세팅하기
-options.add_argument("user-data-dir=/Users/chenjing/Library/Application Support/Google/Chrome/Default")
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
 options.add_argument('lang=ko_KR') # 사용언어 한국어
 options.add_argument('--start-maximized') # 창 최대화
 options.add_argument('disable-gpu') # 하드웨어 가속 안함
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
 # options.add_argument('headless') # 창 숨기기
 
-# chrome_options = Options()
+# 로그인 인증번호 발송되는 현상 방지(mac용)
+# options.add_argument("user-data-dir=/Users/chenjing/Library/Application Support/Google/Chrome/Default")
+# 로그인 인증번호 발송되는 현상 방지(window용)
+options.add_argument("user-data-dir=C:/Users/chenj/AppData/Local/Google/Chrome/User Data/Default")
+
+# Tro브라우저사용
 options.add_argument("--proxy-server=socks5://127.0.0.1:9150")
 
 # 브라우저 세팅
-# driver = webdriver.Chrome(options=options)
-driver = webdriver.Chrome(executable_path='C:/Users/user/Desktop/크롤링/crawler/crwaling code/chromedriver/chromedriver.exe', options=options)
-driver = webdriver.Chrome(executable_path="myPath", options=options)
+driver = webdriver.Chrome(options=options)
 
 # 브라우저에 URL 호출하기
-driver.get(url='https://twitter.com/i/flow/login')
+# driver.get(url='https://twitter.com/i/flow/login')
 
 # 트위터 로그인
-twitter_loggin(driver)
+# twitter_loggin(driver)
 
 # url 변경
-try:
-	el_located(driver, "[data-testid=cellInnerDiv]")
-	driver.get(url=f'https://twitter.com/{nickName}')
-except:
-  print('url변경 오류')
+# try:
+# 	el_located(driver, "[data-testid=cellInnerDiv]")
+# 	driver.get(url=f'https://twitter.com/{nickName}')
+# except:
+#   print('url변경 오류')
+  
+driver.get(url=f'https://twitter.com/{nickName}')
 
 # 첫번째 트윗 리플 갯수 조회
 # 리플 1개 이상이면 주소 추출
