@@ -3,14 +3,15 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-def INSERT_USER_TABLE(df):
+def INSERT_LINK_TABLE(df):
   print('insert')
 
-def READ_USER_TABLE(nickName):
-	file_path = f"database/twit_links/{nickName}_links.json"
-	with open(file_path+"data.json", encoding='utf-8') as f:
+def READ_LINK_TABLE(nickName):
+	with open(f"database/twit_links/{nickName}_links.json", encoding='utf-8') as f:
 		data = json.load(f)
-		print(data)
 
-def UPDATE_USER_TABLE(df):
-	print('update')
+def UPDATE_LINK_TABLE(user, tweetLinks):
+	with open(f"database/twit_links/{user['user_name']}_links.json", "w") as f:
+		json.dump(tweetLinks, f)
+  
+updateLink = UPDATE_LINK_TABLE
